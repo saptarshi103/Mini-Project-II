@@ -41,6 +41,6 @@ app.get('/', (req, res) =>{
 
 
 
-const PORT =process.env.PORT;
+const PORT =80;
 app.listen(PORT,()=>console.log('server is running '));
 
