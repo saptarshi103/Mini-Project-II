@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Room Details Form</title>
+</head>
+<body>
+  <h1>Room Details Form</h1>
+  <form action="http://localhost:3000/roomdetails/create" method="POST" enctype="multipart/form-data">
+    <!-- Photo Upload -->
+    <label for="photos">Upload Photos (min 1, max 4):</label><br>
+    <input type="file" id="photos" name="photos" accept="image/*" multiple required><br>
+    <small>(Please upload between 1 to 4 photos)</small><br><br>
+
+    <!-- Location Coordinates -->
+    <label for="location_cordinate">Location Coordinates (JSON format):</label><br>
+    <input type="text" id="location_cordinate" name="location_cordinate" required><br><br>
+
+    <!-- Available From -->
+    <label for="available_from">Available From (YYYY-MM-DD):</label><br>
+    <input type="date" id="available_from" name="available_from" required><br><br>
+
+    <!-- Preferences -->
+    <label for="preferences">Preferences:</label><br>
+    <input type="text" id="preferences" name="preferences" required><br><br>
+
+    <!-- Rent -->
+    <label for="rent">Rent (in INR):</label><br>
+    <input type="number" id="rent" name="rent" required><br><br>
+
+    <!-- Deposit -->
+    <label for="deposit">Deposit (in INR):</label><br>
+    <input type="number" id="deposit" name="deposit" required><br><br>
+
+    <!-- Built-up Area -->
+    <label for="buildup_area">Built-up Area (in sq. ft):</label><br>
+    <input type="number" id="buildup_area" name="buildup_area" required><br><br>
+
+    <!-- Furnishing -->
+    <label for="furnishing">Furnishing:</label><br>
+    <select id="furnishing" name="furnishing" required>
+      <option value="Fully Furnished">Fully Furnished</option>
+      <option value="Semi-Furnished">Semi-Furnished</option>
+      <option value="Unfurnished">Unfurnished</option>
+    </select><br><br>
+
+    <!-- BHK -->
+    <label for="bhk">BHK:</label><br>
+    <input type="number" id="bhk" name="bhk" required><br><br>
+
+    <!-- Parking -->
+    <label for="parking">Parking:</label><br>
+    <select id="parking" name="parking" required>
+      <option value="car">Car</option>
+      <option value="bike">Bike</option>
+      <option value="both">Both</option>
+      <option value="none">None</option>
+    </select><br><br>
+
+    <!-- Balcony -->
+    <label for="balcony">Number of Balconies:</label><br>
+    <input type="number" id="balcony" name="balcony" required><br><br>
+
+    <!-- Age of Property -->
+    <label for="age_of_property">Age of Property (in years):</label><br>
+    <input type="number" id="age_of_property" name="age_of_property" required><br><br>
+
+    <!-- Non-Veg Allowed -->
+    <label for="non_veg_allowed">Non-Veg Allowed:</label><br>
+    <select id="non_veg_allowed" name="non_veg_allowed" required>
+      <option value="true">Yes</option>
+      <option value="false">No</option>
+    </select><br><br>
+
+    <!-- Floor Number -->
+    <label for="floor_number">Floor Number:</label><br>
+    <input type="number" id="floor_number" name="floor_number" required><br><br>
+
+    <!-- Facing -->
+    <label for="facing">Facing:</label><br>
+    <input type="text" id="facing" name="facing" required><br><br>
+
+    <!-- Number of Bathrooms -->
+    <label for="number_of_bathrooms">Number of Bathrooms:</label><br>
+    <input type="number" id="number_of_bathrooms" name="number_of_bathrooms" required><br><br>
+
+    <!-- Water Supply -->
+    <label for="water_supply">Water Supply Available:</label><br>
+    <select id="water_supply" name="water_supply" required>
+      <option value="true">Yes</option>
+      <option value="false">No</option>
+    </select><br><br>
+
+    <!-- Inverter Backup -->
+    <label for="inverter_backup">Inverter Backup Available:</label><br>
+    <select id="inverter_backup" name="inverter_backup" required>
+      <option value="true">Yes</option>
+      <option value="false">No</option>
+    </select><br><br>
+
+    <!-- Description -->
+    <label for="description">Description:</label><br>
+    <textarea id="description" name="description" rows="4" cols="50" required></textarea><br><br>
+
+    <!-- Property Type -->
+    <label for="property_type">Property Type:</label><br>
+    <select id="property_type" name="property_type" required>
+      <option value="Apartment">Apartment</option>
+      <option value="House">House</option>
+      <option value="PG">PG</option>
+    </select><br><br>
+
+    <!-- Landlord ID -->
+    <label for="landlord_id">Landlord ID:</label><br>
+    <input type="number" id="landlord_id" name="landlord_id" required><br><br>
+
+    <!-- Address -->
+    <label for="address">Address:</label><br>
+    <textarea id="address" name="address" rows="2" cols="50" required></textarea><br><br>
+
+    <!-- City -->
+    <label for="city">City:</label><br>
+    <input type="text" id="city" name="city" required><br><br>
+
+    <!-- State -->
+    <label for="state">State:</label><br>
+    <select id="state" name="state" required>
+      <option value="Andhra Pradesh">Andhra Pradesh</option>
+      <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+      <option value="Assam">Assam</option>
+      <option value="Bihar">Bihar</option>
+      <option value="Chhattisgarh">Chhattisgarh</option>
+      <option value="Goa">Goa</option>
+      <option value="Gujarat">Gujarat</option>
+      <option value="Haryana">Haryana</option>
+      <option value="Himachal Pradesh">Himachal Pradesh</option>
+      <option value="Jharkhand">Jharkhand</option>
+      <option value="Karnataka">Karnataka</option>
+      <option value="Kerala">Kerala</option>
+      <option value="Madhya Pradesh">Madhya Pradesh</option>
+      <option value="Maharashtra">Maharashtra</option>
+      <option value="Manipur">Manipur</option>
+      <option value="Meghalaya">Meghalaya</option>
+      <option value="Mizoram">Mizoram</option>
+      <option value="Nagaland">Nagaland</option>
+      <option value="Odisha">Odisha</option>
+      <option value="Punjab">Punjab</option>
+      <option value="Rajasthan">Rajasthan</option>
+      <option value="Sikkim">Sikkim</option>
+      <option value="Tamil Nadu">Tamil Nadu</option>
+      <option value="Telangana">Telangana</option>
+      <option value="Tripura">Tripura</option>
+      <option value="Uttar Pradesh">Uttar Pradesh</option>
+      <option value="Uttarakhand">Uttarakhand</option>
+      <option value="West Bengal">West Bengal</option>
+    </select><br><br>
+
+    <!-- Pincode -->
+    <label for="pincode">Pincode:</label><br>
+    <input type="text" id="pincode" name="pincode" pattern="[0-9]{6}" required><br>
+    <small>(Enter a valid 6-digit pincode)</small><br><br>
+
+    <!-- Landmark -->
+    <label for="landmark">Landmark:</label><br>
+    <input type="text" id="landmark" name="landmark" required><br><br>
+
+    <!-- Submit Button -->
+    <button type="submit">Submit</button>
+  </form>
+</body>
+</html>
