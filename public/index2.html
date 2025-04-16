@@ -7,7 +7,7 @@
 </head>
 <body>
   <h1>Room Details Form</h1>
-  <form action="http://13.233.193.49/roomdetails/create" method="POST" enctype="multipart/form-data">
+  <form action="http://localhost:3000/roomdetails/create" method="POST" enctype="multipart/form-data">
     <!-- Photo Upload -->
     <label for="photos">Upload Photos (min 1, max 4):</label><br>
     <input type="file" id="photos" name="photos" accept="image/*" multiple required><br>
@@ -113,7 +113,7 @@
 
     <!-- Landlord ID -->
     <label for="landlord_id">Landlord ID:</label><br>
-    <input type="number" id="landlord_id" name="landlord_id" required><br><br>
+    <input type="text" id="landlord_id" name="landlord_id" required><br><br>
 
     <!-- Address -->
     <label for="address">Address:</label><br>

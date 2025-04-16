@@ -6,7 +6,8 @@ const fs = require("fs");
 const path = require("path");
 const { uploadToS3 } = require('../uploadToS3'); // Adjust path as needed
 const AWS = require("aws-sdk");
-
+const jwt = require("jsonwebtoken");
+const authMiddleware = require("../middlewares/authMiddleware");
 
 
 
@@ -29,7 +30,7 @@ router.get('/', async (req, res) => {
   }
 });
 router.get('/x', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public', 'index.html')); // Adjust path if needed
+  res.sendFile(path.join(__dirname, '../public', 'available.html')); // Adjust path if needed
 });
 
 // Configure multer for multiple file uploads
@@ -140,7 +141,7 @@ router.post('/create', upload.array('photos', 4), async (req, res) => {
   }
 });
 
-router.get('/postyourroom', (req, res) => {
+router.get('/postyourroom',authMiddleware, (req, res) => {
   res.sendFile(path.join(__dirname, '../public', 'index2.html')); // Adjust path if needed
 });
 

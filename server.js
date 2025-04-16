@@ -1,5 +1,9 @@
 const express = require('express');         //get express library
+const cookieParser = require("cookie-parser");
+
 const app = express();                      //copy it into app
+app.use(cookieParser());
+
 const db = require('./config/dbConfig');    // importing database connection file 
 const path = require("path");
 
@@ -21,26 +25,25 @@ const logrequest = (req,res,next)=>{          // logs each request
 const User = require('./models/user');
 const Landlord = require('./models/landlord');
 const RoomDetails = require('./models/roomDetails');
+const authRoutes = require("./routes/authRoutes");
+const protectedRoutes = require("./routes/protectedRoutes");
+
 
 Landlord.hasMany(RoomDetails, { foreignKey: 'landlord_id' });
 RoomDetails.belongsTo(Landlord, { foreignKey: 'landlord_id' });
 
 
 
-app.get('/', (req, res) =>{
-    res.send('Welcome to Rental Website!')
-  })
-
-
-
-  const roomRoute = require('./routes//roomRoute');         //import roomdetails files
-  app.use('/roomdetails', roomRoute);                       //use that files
+app.use("/", authRoutes);
+const roomRoute = require('./routes/roomRoute');         //import roomdetails files
+app.use('/roomdetails', roomRoute);                       //use that files
+app.use("/protected", protectedRoutes);
 
 
 
 
 
 
-const PORT =80;
+const PORT =3000;
 app.listen(PORT,()=>console.log('server is running '));
 
