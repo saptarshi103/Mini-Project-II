@@ -449,3 +449,26 @@ async function testContactAPI() {
 }
 
 // Call this function in browser console: testContactAPI()
+
+
+// Handle Search Button Click
+document.getElementById('searchButton').addEventListener('click', async () => {
+    const city = document.getElementById('cityInput').value.trim();
+    if (!city) {
+        alert("Please enter a city name.");
+        return;
+    }
+
+    try {
+        const response = await fetch(`/roomdetails/searchresult?city=${encodeURIComponent(city)}`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch rooms by city');
+        }
+
+        const data = await response.json();
+        roomData = data;
+        displayRooms(data);
+    } catch (error) {
+        document.getElementById('rooms').innerHTML = `<div class="alert alert-danger">Error: ${error.message}</div>`;
+    }
+});

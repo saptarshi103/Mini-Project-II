@@ -1,71 +1,24 @@
 const { DataTypes } = require('sequelize');
-const bcrypt = require('bcrypt'); // Add bcrypt for password hashing
 const sequelize = require('../config/dbConfig');
 
+// Landlords model definition
 const Landlord = sequelize.define('Landlord', {
     landlord_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,  // Changed to STRING since it's the Cognito user ID (which is alphanumeric)
         primaryKey: true,
-        autoIncrement: true,
-    },
-    username: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
-    name: {
-        type: DataTypes.STRING,
         allowNull: false,
     },
     email: {
         type: DataTypes.STRING,
-        unique: true,
-        allowNull: false,
+        unique: true,  // Ensure email is unique across landlords
+        allowNull: false,  // Email is mandatory
     },
-    password: {
-        type: DataTypes.STRING,
-        allowNull: false,
-    },
-    phone_number: {
-        type: DataTypes.STRING,
-        allowNull: true,
-    },
+    
 }, {
-    tableName: 'Landlords', // Match the table name in your database
-    timestamps: false, // Disable timestamps
+    tableName: 'Landlords',  // Match the table name in your database
+    timestamps: false,  // Enable timestamps, as users will have createdAt and updatedAt fields
 });
 
-// Add a hook to hash the password before saving
-Landlord.beforeCreate(async (landlord, options) => {
-    try {
-        // Generate salt and hash the password
-        const salt = await bcrypt.genSalt(10);
-        landlord.password = await bcrypt.hash(landlord.password, salt);
-    } catch (error) {
-        throw error;
-    }
-});
-
-Landlord.beforeUpdate(async (landlord, options) => {
-    try {
-        if (landlord.changed('password')) {
-            // Generate salt and hash the updated password
-            const salt = await bcrypt.genSalt(10);
-            landlord.password = await bcrypt.hash(landlord.password, salt);
-        }
-    } catch (error) {
-        throw error;
-    }
-});
-
-// Add a method to compare passwords
-Landlord.prototype.comparePassword = async function (candidatePassword) {
-    try {
-        // Compare the given password with the hashed password
-        const isMatch = await bcrypt.compare(candidatePassword, this.password);
-        return isMatch;
-    } catch (error) {
-        throw error;
-    }
-};
+// Optionally, add some instance methods or hooks if required (e.g., for validation or additional processing)
 
 module.exports = Landlord;

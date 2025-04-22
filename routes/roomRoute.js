@@ -50,7 +50,8 @@ const upload = multer({
 });
 
 // POST endpoint to create a new room listing with up to 4 photos
-router.post('/create', upload.array('photos', 4), async (req, res) => {
+// POST endpoint to create a new room listing with up to 4 photos
+router.post('/create', authMiddleware, upload.array('photos', 4), async (req, res) => {
   try {
     const {
       location_cordinate,
@@ -75,18 +76,18 @@ router.post('/create', upload.array('photos', 4), async (req, res) => {
       inverter_backup,
       description,
       property_type,
-      landlord_id,
       address,
       landmark
     } = req.body;
 
-    const files = req.files; // Array of uploaded files
+    const landlord_id = req.user.id; // ✅ Auto-filled from Cognito token
+
+    const files = req.files;
 
     if (!files || files.length < 1 || files.length > 4) {
       return res.status(400).json({ error: "Please upload between 1 and 4 photos." });
     }
 
-    // Upload each photo to S3 and collect their URLs
     const publicUrls = [];
 
     for (const file of files) {
@@ -95,17 +96,15 @@ router.post('/create', upload.array('photos', 4), async (req, res) => {
       try {
         const publicUrl = await uploadToS3(imagePath);
         publicUrls.push(publicUrl);
-        // Optionally delete the local file after successful upload
-        fs.unlinkSync(imagePath);
+        fs.unlinkSync(imagePath); // clean up
       } catch (uploadError) {
         console.error("Error uploading file to S3:", uploadError);
         return res.status(500).json({ error: "Failed to upload photos to S3." });
       }
     }
 
-    // Create a new room record in the database
     const newRoom = await RoomDetails.create({
-      photos: JSON.stringify(publicUrls), // Store URLs as a JSON string
+      photos: JSON.stringify(publicUrls),
       location_cordinate,
       available_from,
       preferences,
@@ -128,12 +127,11 @@ router.post('/create', upload.array('photos', 4), async (req, res) => {
       inverter_backup,
       description,
       property_type,
-      landlord_id,
+      landlord_id, // ✅ injected from token
       address,
       landmark,
     });
 
-    // Respond with the saved room details
     res.status(200).json(newRoom);
   } catch (error) {
     console.error("Error creating room details:", error);
@@ -141,8 +139,32 @@ router.post('/create', upload.array('photos', 4), async (req, res) => {
   }
 });
 
+
 router.get('/postyourroom',authMiddleware, (req, res) => {
   res.sendFile(path.join(__dirname, '../public', 'index2.html')); // Adjust path if needed
 });
+
+
+// Get rooms by city (e.g., ?city=Pune)
+router.get('/searchresult', async (req, res) => {
+  const city = req.query.city || req.query.location;
+
+  if (!city) {
+    return res.status(400).json({ error: 'City is required as a query parameter' });
+  }
+
+  try {
+    const rooms = await RoomDetails.findAll({
+      where: { city }
+    });
+
+    res.status(200).json(rooms);
+  } catch (err) {
+    console.error('Error searching rooms by city:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
 
 module.exports = router;

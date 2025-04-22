@@ -27,6 +27,7 @@ const Landlord = require('./models/landlord');
 const RoomDetails = require('./models/roomDetails');
 const authRoutes = require("./routes/authRoutes");
 const protectedRoutes = require("./routes/protectedRoutes");
+const dashboardRoutes = require("./routes/dashboardRoutes");
 
 
 Landlord.hasMany(RoomDetails, { foreignKey: 'landlord_id' });
@@ -38,6 +39,9 @@ app.use("/", authRoutes);
 const roomRoute = require('./routes/roomRoute');         //import roomdetails files
 app.use('/roomdetails', roomRoute);                       //use that files
 app.use("/protected", protectedRoutes);
+app.use("/dashboard", dashboardRoutes);
+app.use(express.static('public'));
+
 
 
 

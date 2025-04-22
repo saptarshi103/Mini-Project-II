@@ -1,6 +1,7 @@
 const express = require("express");
 const axios = require("axios");
 const qs = require("querystring");
+const path = require("path");
 
 const router = express.Router();
 
@@ -13,7 +14,7 @@ const {
 
 // Home Route
 router.get("/", (req, res) => {
-    res.send("WELCOME TO MY WEBSITE!");
+  res.sendFile(path.join(__dirname, '../public', 'index.html')); // Adjust path if needed
 });
 
 // Redirect to Cognito login

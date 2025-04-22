@@ -599,7 +599,7 @@ const roomDatabase = [
 // First ensure rooms are displayed
 document.addEventListener('DOMContentLoaded', () => {
     // Get search parameters from URL
-    const urlParams = new URLSearchParams(window.location.search);
+    const urlParams = new URLSearchParams(window.city.search);
     const location = urlParams.get('location');
     const propertyType = urlParams.get('propertyType');
     const bhkType = urlParams.get('bhkType');

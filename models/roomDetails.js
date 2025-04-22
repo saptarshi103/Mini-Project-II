@@ -2,19 +2,18 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../config/dbConfig');
 const Landlord = require('./landlord'); // For foreign key relation
 
-
 const RoomDetails = sequelize.define('RoomDetails', {
     room_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
     },
-    location_cordinate:{
-        type: DataTypes.TEXT, // Store URLs or JSON strings if multiple
+    location_cordinate: {
+        type: DataTypes.TEXT, // Store coordinates or JSON strings
         allowNull: false,
     },
     photos: {
-        type: DataTypes.TEXT, // Store URLs or JSON strings if multiple
+        type: DataTypes.TEXT, // Store URLs or JSON strings for multiple photos
         allowNull: false,
     },
     available_from: {
@@ -110,16 +109,16 @@ const RoomDetails = sequelize.define('RoomDetails', {
         allowNull: false,
     },
     landlord_id: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.UUID,  // Ensure landlord_id is UUID since Landlord model has UUID
         references: {
-            model: Landlord, // Table name
-            key: 'landlord_id',
+            model: Landlord, // Referencing Landlord table
+            key: 'landlord_id',  // Foreign key should match the Landlord model's primary key
         },
         allowNull: false,
     },
 }, {
     tableName: 'RoomDetails', // Match the table name in your database
-    timestamps: false,
+    timestamps: false, // Enable timestamps (createdAt, updatedAt)
 });
 
 module.exports = RoomDetails;
