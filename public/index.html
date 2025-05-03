@@ -12,6 +12,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Add in the head section -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+
+
+
+
 </head>
 <body>
    <header>
@@ -27,8 +32,9 @@
                     <li class="item"> <a class="nav-link" href="#about-section">About</a></li>
                     <li class="item"> <a class="nav-link" href="#contact-section">Contact Us</a></li>
                     <!-- <li class="item"> <a class="nav-link" href="##">Sign Up</a></li> -->
-                    <li class="item"> <a class="nav-link" href="http://localhost:3000/login">Login</a></li>
-                    <li class="item"> <a class="nav-link" href="http://localhost:3000/logout">Logout</a></li>
+                    <li class="item"> <a class="nav-link" href="http://localhost:3000/login" id="loginBtn">Login</a></li>
+                    <li class="item"> <a class="nav-link" href="http://localhost:3000/logout" id="logoutBtn">Logout</a></li>
+
                     <li class="item"> <a class="nav-link" href="/dashboard/">Dashboard</a></li>
 
                 </ul>
@@ -38,46 +44,25 @@
     </div>
    </header>
  <!--main section  -->
-<main class="hero-section" id="home">
+<main class="hero-section" id="home" style="background-image: url('img/Luxury-Collection-President-Wilson-4-2.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
     <div class="container grid">
         <div class="hero-content">
             <h1 class="hero-heading">Focus on what's important and spend less on rent.</h1>
-            
-            <!-- Updated search section with dropdown -->
-            <div class="search-container">
-                <form class="search-form">
-                    <select class="location-dropdown" onchange="updateSearchInput(this.value)">
-                        <option value="">Select Location</option>
-                        <option value="Ichalkaranji">Ichalkaranji</option>
-                        <option value="Kolhapur">Kolhapur</option>
-                        <option value="Sangli">Sangli</option>
-                    </select>
-                    <input type="text" placeholder="Enter location, property type, or keywords..." class="search-input" id="searchInput">
-                    <button type="submit" class="search-button">Search</button>
-                </form>
-                
-                <!-- Added property type options -->
-                <div class="property-options">
-                    <div class="radio-group">
-                        <label>
-                            <input type="radio" name="propertyType" value="fullHouse" onchange="updateTypeDropdown('fullHouse')">
-                            Full House
-                        </label>
-                        <label>
-                            <input type="radio" name="propertyType" value="pgHostel" onchange="updateTypeDropdown('pgHostel')">
-                            PG/Hostel
-                        </label>
-                        <label>
-                            <input type="radio" name="propertyType" value="flatmates" onchange="updateTypeDropdown('flatmates')">
-                            Flatmates
-                        </label>
-                    </div>
-                    
-                    <select class="type-dropdown" id="typeDropdown">
-                        <option value="">Select Type</option>
-                    </select>
-                </div>
-            </div>
+
+                    <div class="search-box">
+                        <i class="fas fa-search search-icon"></i>
+                        <select id="cityInput" class="search-input">
+                            <option value="" disabled selected>Select a city</option>
+                            <option value="Ichalkaranji">Ichalkaranji</option>
+                            <option value="Kolhapur">Kolhapur</option>
+                            <option value="Sangli">Sangli</option>
+                        </select>
+                        <button class="search-button" onclick="searchRooms()">
+                            <span>Search</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>            
+         
 
             <!-- Added Property Owner Section -->
             <div class="property-owner-section">
@@ -325,5 +310,192 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 <script src="script.js"></script>
 <script src="contact.js"></script>
+
+<script>
+    function searchRooms() {
+        const city = document.getElementById("cityInput").value;
+        
+        if (!city) {
+            alert("Please select a city.");
+            return;
+        }
+
+        // Redirect to search results page with city parameter
+        window.location.href = `/roomdetails/searchresults?city=${encodeURIComponent(city)}`;
+    }
+</script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const res = await fetch('http://localhost:3000/protected/auth/status', {
+          credentials: 'include' // important if you're using cookies
+        });
+        const data = await res.json();
+  
+        const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+  
+        if (data.isLoggedIn) {
+          loginBtn.style.display = 'none';
+          logoutBtn.style.display = 'inline-block';
+        } else {
+          loginBtn.style.display = 'inline-block';
+          logoutBtn.style.display = 'none';
+        }
+      } catch (err) {
+        console.error('Failed to check auth status:', err);
+      }
+    });
+  </script>
+  
+
+<style>
+    .search-title {
+        font-size: 2.8rem;
+        color: #4a6572;
+        margin-bottom: 1rem;
+        font-weight: 700;
+        text-align: center;
+    }
+
+    .search-subtitle {
+        font-size: 1.2rem;
+        color: #8597a3;
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .search-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .search-box {
+        display: flex;
+        align-items: center;
+        background: #f8f9fa;
+        border-radius: 50px;
+        padding: 1rem 2rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        border: 1px solid #e0e6ed;
+        min-height: 70px;
+        width: 100%;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .search-box:focus-within {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        transform: translateY(-2px);
+        border-color: #a0b3c0;
+    }
+
+    .search-icon {
+        color: #8597a3;
+        font-size: 2rem;
+        margin-right: 1.5rem;
+    }
+
+    .search-input {
+        flex: 1;
+        border: none;
+        outline: none;
+        font-size: 1.5rem;
+        padding: 1.2rem 0;
+        color: #4a6572;
+        background: transparent;
+        cursor: pointer;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238597a3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 1.5rem center;
+        background-size: 2em;
+        padding-right: 3rem;
+    }
+
+    .search-input option {
+        padding: 1.2rem;
+        font-size: 1.4rem;
+        color: #4a6572;
+        background: white;
+    }
+
+    .search-input option:disabled {
+        color: #a0b3c0;
+        font-size: 1.4rem;
+    }
+
+    .search-button {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        background: #5d9cec;
+        color: white;
+        border: none;
+        padding: 1.2rem 2.5rem;
+        border-radius: 40px;
+        font-size: 1.4rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-left: 1rem;
+    }
+
+    .search-button:hover {
+        background: #4a89dc;
+        transform: translateX(5px);
+    }
+
+    .search-button i {
+        font-size: 1.4rem;
+        transition: transform 0.3s ease;
+    }
+
+    @media (max-width: 768px) {
+        .search-title {
+            font-size: 2rem;
+        }
+
+        .search-subtitle {
+            font-size: 1rem;
+        }
+
+        .search-container {
+            padding: 1rem;
+        }
+
+        .search-box {
+            flex-direction: column;
+            border-radius: 25px;
+            padding: 1.5rem;
+            min-height: auto;
+        }
+
+        .search-input {
+            width: 100%;
+            margin: 1rem 0;
+            text-align: left;
+            padding-left: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .search-button {
+            width: 100%;
+            justify-content: center;
+            margin-left: 0;
+            margin-top: 1rem;
+        }
+
+        .search-icon {
+            font-size: 1.8rem;
+            margin-right: 1rem;
+        }
+    }
+</style>
 </body>
 </html>

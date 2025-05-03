@@ -4,140 +4,317 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Room Details Form</title>
+  <link rel="stylesheet" href="/Style.css">
+  <link rel="stylesheet" href="/index2.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+  <style>
+    #map-popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1000;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    }
+    #map {
+      height: 400px;
+      width: 600px;
+    }
+    .map-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 999;
+    }
+    .close-map {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 5px 10px;
+      background: #ff4444;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-  <h1>Room Details Form</h1>
-  <form id="roomForm" enctype="multipart/form-data">
-    <label for="photos">Upload Photos (min 1, max 4):</label><br>
-    <input type="file" id="photos" name="photos" accept="image/*" multiple required><br>
-    <small>(Please upload between 1 to 4 photos)</small><br><br>
+  <header>
+    <div class="section-navbar">
+      <div class="container">
+        <div class="img">
+          <img src="/img/room-finder-logo-removebg-preview.png" alt="Room Finder Logo">
+        </div>
+        <div class="navbar-links">
+          <ul class="nav">
+            <li class="item"> <a class="nav-link" href="/index.html">Home</a></li>
+            <li class="item"> <a class="nav-link" href="/index.html">About</a></li>
+            <li class="item"> <a class="nav-link" href="/index.html">Contact Us</a></li>
+            <!-- <li class="item"> <a class="nav-link" href="http://localhost:3000/login">Login</a></li> -->
+            <li class="item"> <a class="nav-link" href="http://localhost:3000/logout">Logout</a></li>
+            <li class="item"> <a class="nav-link" href="/dashboard/">Dashboard</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
 
-    <label for="location_cordinate">Location Coordinates (JSON format):</label><br>
-    <input type="text" id="location_cordinate" name="location_cordinate" required><br><br>
+  <main class="container">
+    <form id="roomForm" enctype="multipart/form-data" class="form-grid">
+      <div class="form-progress">
+        <div class="progress-step active"></div>
+        <div class="progress-step"></div>
+        <div class="progress-step"></div>
+        <div class="progress-step"></div>
+      </div>
 
-    <label for="available_from">Available From (YYYY-MM-DD):</label><br>
-    <input type="date" id="available_from" name="available_from" required><br><br>
+      <!-- Section 1: Basic Information -->
+      <div class="form-section active">
+        <h2 class="section-title">Basic Information</h2>
+        <label for="photos">Upload Photos (min-1 & max-4)</label>
+        <input type="file" id="photos" name="photos" accept="image/*" multiple required>
+        
+        <label for="property_type">Property Type</label>
+        <select id="property_type" name="property_type" required>
+            <option value="Apartment">Apartment</option>
+            <option value="House">House</option>
+            <option value="PG">PG</option>
+        </select>
 
-    <label for="preferences">Preferences:</label><br>
-    <input type="text" id="preferences" name="preferences" required><br><br>
+        <label for="bhk">BHK</label>
+        <input type="number" id="bhk" name="bhk" required>
 
-    <label for="rent">Rent (in INR):</label><br>
-    <input type="number" id="rent" name="rent" required><br><br>
+        <label for="buildup_area">Built-up Area (sq. ft)</label>
+        <input type="number" id="buildup_area" name="buildup_area" required>
 
-    <label for="deposit">Deposit (in INR):</label><br>
-    <input type="number" id="deposit" name="deposit" required><br><br>
+        <label for="furnishing">Furnishing</label>
+        <select id="furnishing" name="furnishing" required>
+            <option value="Fully Furnished">Fully Furnished</option>
+            <option value="Semi-Furnished">Semi-Furnished</option>
+            <option value="Unfurnished">Unfurnished</option>
+        </select>
 
-    <label for="buildup_area">Built-up Area (in sq. ft):</label><br>
-    <input type="number" id="buildup_area" name="buildup_area" required><br><br>
+        <div class="form-navigation">
+            <div></div>
+            <button type="button" class="nav-button next">Next</button>
+        </div>
+      </div>
 
-    <label for="furnishing">Furnishing:</label><br>
-    <select id="furnishing" name="furnishing" required>
-      <option value="Fully Furnished">Fully Furnished</option>
-      <option value="Semi-Furnished">Semi-Furnished</option>
-      <option value="Unfurnished">Unfurnished</option>
-    </select><br><br>
+      <!-- Section 2: Pricing & Availability -->
+      <div class="form-section">
+        <h2 class="section-title">Pricing & Availability</h2>
+        <label for="rent">Monthly Rent (INR)</label>
+        <input type="number" id="rent" name="rent" required>
 
-    <label for="bhk">BHK:</label><br>
-    <input type="number" id="bhk" name="bhk" required><br><br>
+        <label for="deposit">Security Deposit (INR)</label>
+        <input type="number" id="deposit" name="deposit" required>
 
-    <label for="parking">Parking:</label><br>
-    <select id="parking" name="parking" required>
-      <option value="car">Car</option>
-      <option value="bike">Bike</option>
-      <option value="both">Both</option>
-      <option value="none">None</option>
-    </select><br><br>
+        <label for="available_from">Available From</label>
+        <input type="date" id="available_from" name="available_from" required>
 
-    <label for="balcony">Number of Balconies:</label><br>
-    <input type="number" id="balcony" name="balcony" required><br><br>
+        <label for="preferences">Tenant Preference</label>
+        <select id="preferences" name="preferences" required>
+            <option value="Boys">Boys</option>
+            <option value="Girls">Girls</option>
+            <option value="Family">Family</option>
+        </select>
 
-    <label for="age_of_property">Age of Property (in years):</label><br>
-    <input type="number" id="age_of_property" name="age_of_property" required><br><br>
+        <label for="non_veg_allowed">Non-Veg Allowed</label>
+        <select id="non_veg_allowed" name="non_veg_allowed" required>
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
 
-    <label for="non_veg_allowed">Non-Veg Allowed:</label><br>
-    <select id="non_veg_allowed" name="non_veg_allowed" required>
-      <option value="true">Yes</option>
-      <option value="false">No</option>
-    </select><br><br>
+        <div class="form-navigation">
+            <button type="button" class="nav-button prev">Previous</button>
+            <button type="button" class="nav-button next">Next</button>
+        </div>
+      </div>
 
-    <label for="floor_number">Floor Number:</label><br>
-    <input type="number" id="floor_number" name="floor_number" required><br><br>
+      <!-- Section 3: Property Features -->
+      <div class="form-section">
+        <h2 class="section-title">Property Features</h2>
+        <label for="parking">Parking Available</label>
+        <select id="parking" name="parking" required>
+            <option value="car">Car</option>
+            <option value="bike">Bike</option>
+            <option value="both">Both</option>
+            <option value="none">None</option>
+        </select>
 
-    <label for="facing">Facing:</label><br>
-    <input type="text" id="facing" name="facing" required><br><br>
+        <label for="balcony">Number of Balconies</label>
+        <input type="number" id="balcony" name="balcony" required>
 
-    <label for="number_of_bathrooms">Number of Bathrooms:</label><br>
-    <input type="number" id="number_of_bathrooms" name="number_of_bathrooms" required><br><br>
+        <label for="number_of_bathrooms">Number of Bathrooms</label>
+        <input type="number" id="number_of_bathrooms" name="number_of_bathrooms" required>
 
-    <label for="water_supply">Water Supply Available:</label><br>
-    <select id="water_supply" name="water_supply" required>
-      <option value="true">Yes</option>
-      <option value="false">No</option>
-    </select><br><br>
+        <label for="water_supply">Water Supply</label>
+        <select id="water_supply" name="water_supply" required>
+            <option value="true">Available</option>
+            <option value="false">Not Available</option>
+        </select>
 
-    <label for="inverter_backup">Inverter Backup Available:</label><br>
-    <select id="inverter_backup" name="inverter_backup" required>
-      <option value="true">Yes</option>
-      <option value="false">No</option>
-    </select><br><br>
+        <label for="inverter_backup">Power Backup</label>
+        <select id="inverter_backup" name="inverter_backup" required>
+            <option value="true">Available</option>
+            <option value="false">Not Available</option>
+        </select>
 
-    <label for="description">Description:</label><br>
-    <textarea id="description" name="description" rows="4" cols="50" required></textarea><br><br>
+        <div class="form-navigation">
+            <button type="button" class="nav-button prev">Previous</button>
+            <button type="button" class="nav-button next">Next</button>
+        </div>
+      </div>
 
-    <label for="property_type">Property Type:</label><br>
-    <select id="property_type" name="property_type" required>
-      <option value="Apartment">Apartment</option>
-      <option value="House">House</option>
-      <option value="PG">PG</option>
-    </select><br><br>
+      <!-- Section 4: Location & Contact -->
+      <div class="form-section">
+        <h2 class="section-title">Location & Contact</h2>
+        <label for="address">Complete Address</label>
+        <textarea id="address" name="address" rows="2" required></textarea>
 
-    <label for="address">Address:</label><br>
-    <textarea id="address" name="address" rows="2" cols="50" required></textarea><br><br>
+        <label for="city">City</label>
+        <input type="text" id="city" name="city" required>
 
-    <label for="city">City:</label><br>
-    <input type="text" id="city" name="city" required><br><br>
+        <label for="state">State</label>
+        <select id="state" name="state" required>
+            <option value="Andhra Pradesh">Andhra Pradesh</option>
+            <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+            <option value="Assam">Assam</option>
+            <option value="Bihar">Bihar</option>
+            <option value="Chhattisgarh">Chhattisgarh</option>
+            <option value="Goa">Goa</option>
+            <option value="Gujarat">Gujarat</option>
+            <option value="Haryana">Haryana</option>
+            <option value="Himachal Pradesh">Himachal Pradesh</option>
+            <option value="Jharkhand">Jharkhand</option>
+            <option value="Karnataka">Karnataka</option>
+            <option value="Kerala">Kerala</option>
+            <option value="Madhya Pradesh">Madhya Pradesh</option>
+            <option value="Maharashtra">Maharashtra</option>
+            <option value="Manipur">Manipur</option>
+            <option value="Meghalaya">Meghalaya</option>
+            <option value="Mizoram">Mizoram</option>
+            <option value="Nagaland">Nagaland</option>
+            <option value="Odisha">Odisha</option>
+            <option value="Punjab">Punjab</option>
+            <option value="Rajasthan">Rajasthan</option>
+            <option value="Sikkim">Sikkim</option>
+            <option value="Tamil Nadu">Tamil Nadu</option>
+            <option value="Telangana">Telangana</option>
+            <option value="Tripura">Tripura</option>
+            <option value="Uttar Pradesh">Uttar Pradesh</option>
+            <option value="Uttarakhand">Uttarakhand</option>
+            <option value="West Bengal">West Bengal</option>
+        </select>
 
-    <label for="state">State:</label><br>
-    <select id="state" name="state" required>
-      <option value="Andhra Pradesh">Andhra Pradesh</option>
-      <option value="Arunachal Pradesh">Arunachal Pradesh</option>
-      <option value="Assam">Assam</option>
-      <option value="Bihar">Bihar</option>
-      <option value="Chhattisgarh">Chhattisgarh</option>
-      <option value="Goa">Goa</option>
-      <option value="Gujarat">Gujarat</option>
-      <option value="Haryana">Haryana</option>
-      <option value="Himachal Pradesh">Himachal Pradesh</option>
-      <option value="Jharkhand">Jharkhand</option>
-      <option value="Karnataka">Karnataka</option>
-      <option value="Kerala">Kerala</option>
-      <option value="Madhya Pradesh">Madhya Pradesh</option>
-      <option value="Maharashtra">Maharashtra</option>
-      <option value="Manipur">Manipur</option>
-      <option value="Meghalaya">Meghalaya</option>
-      <option value="Mizoram">Mizoram</option>
-      <option value="Nagaland">Nagaland</option>
-      <option value="Odisha">Odisha</option>
-      <option value="Punjab">Punjab</option>
-      <option value="Rajasthan">Rajasthan</option>
-      <option value="Sikkim">Sikkim</option>
-      <option value="Tamil Nadu">Tamil Nadu</option>
-      <option value="Telangana">Telangana</option>
-      <option value="Tripura">Tripura</option>
-      <option value="Uttar Pradesh">Uttar Pradesh</option>
-      <option value="Uttarakhand">Uttarakhand</option>
-      <option value="West Bengal">West Bengal</option>
-    </select><br><br>
+        <label for="pincode">Pincode</label>
+        <input type="text" id="pincode" name="pincode" pattern="[0-9]{6}" required>
 
-    <label for="pincode">Pincode:</label><br>
-    <input type="text" id="pincode" name="pincode" pattern="[0-9]{6}" required><br>
-    <small>(Enter a valid 6-digit pincode)</small><br><br>
+        <label for="landmark">Landmark</label>
+        <input type="text" id="landmark" name="landmark" required>
 
-    <label for="landmark">Landmark:</label><br>
-    <input type="text" id="landmark" name="landmark" required><br><br>
+        <label for="location_cordinate">Location Coordinates (Latitude, Longitude)</label>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <input type="text" id="location_cordinate" name="location_cordinate" placeholder="Click 'Select on Map' to choose location" readonly>
+          <button type="button" onclick="openMap()" style="padding: 8px 15px; background: #84cfe1; color: white; border: none; border-radius: 5px; cursor: pointer;">Select on Map</button>
+        </div>
 
-    <button type="submit">Submit</button>
-  </form>
+        <label for="age_of_property">Age of Property (in years)</label>
+        <input type="number" id="age_of_property" name="age_of_property" min="0" required>
+    
+        <label for="floor_number">Floor Number</label>
+        <input type="number" id="floor_number" name="floor_number" min="0" required>
+
+        <label for="facing">Facing Direction</label>
+<select id="facing" name="facing" required>
+  <option value="">Select</option>
+  <option value="North">North</option>
+  <option value="South">South</option>
+  <option value="East">East</option>
+  <option value="West">West</option>
+  <option value="North-East">North-East</option>
+  <option value="South-East">South-East</option>
+  <option value="North-West">North-West</option>
+  <option value="South-West">South-West</option>
+</select>
+
+<label for="description">Property Description</label>
+<textarea id="description" name="description" rows="3" placeholder="Describe your property" required></textarea>
+
+
+
+        <div class="form-navigation">
+            <button type="button" class="nav-button prev">Previous</button>
+            <button type="submit" class="nav-button">Submit</button>
+        </div>
+      </div>
+    </form>
+  </main>
+
+  <footer>
+    <div class="footer-container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>About Room Finder</h3>
+          <p>Room Finder helps you find the perfect accommodation with ease. We connect property owners with potential tenants, making the house-hunting process simple and efficient.</p>
+        </div>
+        
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="search.html">Search Properties</a></li>
+            <li><a href="list-property.html">List Property</a></li>
+            <li><a href="#contact-section">Contact Us</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-section">
+          <h3>Connect With Us</h3>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+          </div>
+        </div>
+        
+        <div class="footer-section">
+          <h3>Contact Info</h3>
+          <div class="contact-info">
+            <p><i class="fas fa-phone"></i> +91 1234567890</p>
+            <p><i class="fas fa-envelope"></i> info@roomfinder.com</p>
+            <p><i class="fas fa-map-marker-alt"></i> Kolhapur, Maharashtra, India</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>&copy; 2024 Room Finder. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <button id="backToTop" class="back-to-top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="script.js"></script>
+  <script src="contact.js"></script>
+  <script src="/index2.js"></script>
 
   <script>
     document.getElementById('roomForm').addEventListener('submit', async function (e) {
@@ -163,6 +340,61 @@
         alert('An error occurred while uploading room data.');
       }
     });
+  </script>
+
+  <div class="map-overlay" id="mapOverlay"></div>
+  <div id="map-popup">
+    <button class="close-map" onclick="closeMap()">×</button>
+    <div id="map"></div>
+    <div style="margin-top: 10px; text-align: center;">
+      <button onclick="confirmLocation()" style="padding: 8px 15px; background: #84cfe1; color: white; border: none; border-radius: 5px; cursor: pointer;">Confirm Location</button>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+  <script>
+  let map, marker;
+
+  function openMap() {
+    document.getElementById('mapOverlay').style.display = 'block';
+    document.getElementById('map-popup').style.display = 'block';
+    
+    if (!map) {
+      map = L.map('map').setView([20.5937, 78.9629], 5); // India center
+      
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'Map data © OpenStreetMap contributors'
+      }).addTo(map);
+
+      map.on('click', function(e) {
+        const { lat, lng } = e.latlng;
+        if (marker) {
+          marker.setLatLng(e.latlng);
+        } else {
+          marker = L.marker(e.latlng).addTo(map);
+        }
+      });
+    }
+  }
+
+  function closeMap() {
+    document.getElementById('mapOverlay').style.display = 'none';
+    document.getElementById('map-popup').style.display = 'none';
+  }
+
+  function confirmLocation() {
+    if (marker) {
+      const lat = marker.getLatLng().lat.toFixed(6);
+      const lng = marker.getLatLng().lng.toFixed(6);
+      document.getElementById('location_cordinate').value = `${lat}, ${lng}`;
+      closeMap();
+    } else {
+      alert('Please select a location on the map first');
+    }
+  }
+
+  // Close map when clicking overlay
+  document.getElementById('mapOverlay').addEventListener('click', closeMap);
   </script>
 </body>
 </html>

@@ -50,6 +50,8 @@ router.delete('/delete/:room_id', authMiddleware, async (req, res) => {
   }
 });
 
-  
+router.get('/xxx',authMiddleware, (req, res) => {
+  res.sendFile(path.join(__dirname, '../public', 'index2.html')); // Adjust path if needed
+});
 
   module.exports = router;

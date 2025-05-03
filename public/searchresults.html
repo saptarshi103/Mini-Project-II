@@ -4,148 +4,87 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Results - Room Finder</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="searchresults.css">
-    <!-- Add this in your HTML head section -->
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY"></script>
+    <link rel="stylesheet" href="/searchresults.css">
+    <link rel="stylesheet" href="/Style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="index.html" class="logo">
-                <img src="img/room-finder-logo-removebg-preview.png" alt="Room Finder Logo">
-            </a>
-            <div class="nav-links">
-                <a href="index.html">Home</a>
-                <a href="index.html#contact-section">Contact US</a>
-                <a href="index.html#about-section">About</a>
-                <a href="login.html">Login</a>
+    <header>
+        <div class="section-navbar">
+            <div class="container grid grid-two-cols">
+                <div class="img">
+                    <img src="/img/room-finder-logo-removebg-preview.png" alt="Room Finder Logo">
+                </div>
+                <button class="menu-toggle">Menu</button>
+                <div class="navbar-links">
+                    <ul class="nav">
+                        <li class="item"><a class="nav-link" href="index.html">Home</a></li>
+                        <li class="item"><a class="nav-link" href="index.html#about-section">About</a></li>
+                        <li class="item"><a class="nav-link" href="index.html#contact-section">Contact Us</a></li>
+                        <li class="item"><a class="nav-link" href="http://localhost:3000/login">Login</a></li>
+                        <li class="item"><a class="nav-link" href="http://localhost:3000/logout">Logout</a></li>
+                        <li class="item"><a class="nav-link" href="/dashboard/">Dashboard</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
-    </nav>
+    </header>
 
-    <div class="page-container">
-        <!-- Filter Sidebar -->
-        <div class="filter-sidebar">
-            <div class="filter-section">
-                <div class="filter-buttons">
-                    <button class="apply-btn">
-                        <i class="fas fa-filter"></i>Apply Filters
-                    </button>
-                    <button class="reset-btn">
-                        <i class="fas fa-redo"></i>Reset
-                    </button>
-                </div>
-                
-                <div class="filter-group">
-                    <h3>BHK Type</h3>
-                    <label><input type="checkbox" name="bhk" value="1rk"> 1 RK</label>
-                    <label><input type="checkbox" name="bhk" value="1bhk"> 1 BHK</label>
-                    <label><input type="checkbox" name="bhk" value="2bhk"> 2 BHK</label>
-                    <label><input type="checkbox" name="bhk" value="3bhk"> 3 BHK</label>
-                    <label><input type="checkbox" name="bhk" value="4bhk"> 4 BHK</label>
-                    <label><input type="checkbox" name="bhk" value="4plus"> 4+ BHK</label>
-                </div>
-
-                <div class="filter-group">
-                    <h3>Rent Range</h3>
-                    <div class="rent-ranges">
-                        <label>
-                            <input type="radio" name="rent-range" value="5000">
-                            <span>₹0 - ₹5,000</span>
-                        </label>
-                        <label>
-                            <input type="radio" name="rent-range" value="10000">
-                            <span>₹5,000 - ₹10,000</span>
-                        </label>
-                        <label>
-                            <input type="radio" name="rent-range" value="15000">
-                            <span>₹10,000 - ₹15,000</span>
-                        </label>
-                        <label>
-                            <input type="radio" name="rent-range" value="20000">
-                            <span>₹15,000 - ₹20,000</span>
-                        </label>
-                        <label>
-                            <input type="radio" name="rent-range" value="25000">
-                            <span>₹20,000 - ₹25,000</span>
-                        </label>
-                        <label>
-                            <input type="radio" name="rent-range" value="50000">
-                            <span>₹25,000 - ₹50,000</span>
-                        </label>
-                        <label>
-                            <input type="radio" name="rent-range" value="100000">
-                            <span>Above ₹50,000</span>
-                        </label>
+    <!-- Main Content -->
+    <main class="search-layout">
+        <aside class="filter-bar">
+            <h3>Filter Rooms</h3>
+            <form id="filterForm">
+                <label>
+                    City:
+                    <select id="filterCity" name="city">
+                        <option value="">Any</option>
+                    </select>
+                </label>
+                <label>
+                    Rent Range:
+                    <div class="rent-range">
+                        <input type="number" id="filterRentMin" name="rentMin" placeholder="Min ₹" min="0">
+                        <span> - </span>
+                        <input type="number" id="filterRentMax" name="rentMax" placeholder="Max ₹" min="0">
                     </div>
-                </div>
-
-                <div class="filter-group">
-                    <h3>Visit Properties</h3>
-                    <label><input type="checkbox"> Within next 2 days</label>
-                    <label><input type="checkbox"> Owner hosting a visit</label>
-                </div>
-
-                <div class="filter-group">
-                    <h3>Availability</h3>
-                    <label><input type="radio" name="availability" value="immediate"> Immediate</label>
-                    <label><input type="radio" name="availability" value="15days"> Within 15 Days</label>
-                    <label><input type="radio" name="availability" value="30days"> Within 30 Days</label>
-                    <label><input type="radio" name="availability" value="after30"> After 30 Days</label>
-                </div>
-
-                <div class="filter-group">
-                    <h3>Preferred Tenants</h3>
-                    <label><input type="checkbox" name="tenant" value="family"> Family</label>
-                    <label><input type="checkbox" name="tenant" value="company"> Company</label>
-                    <label><input type="checkbox" name="tenant" value="bachelor-male"> Bachelor Male</label>
-                    <label><input type="checkbox" name="tenant" value="bachelor-female"> Bachelor Female</label>
-                </div>
-
-                <div class="filter-group">
-                    <h3>Property Type</h3>
-                    <label><input type="checkbox" value="apartment"> Apartment</label>
-                    <label><input type="checkbox" value="independent"> Independent House/Villa</label>
-                    <label><input type="checkbox" value="gated"> Gated Community Villa</label>
-                </div>
-
-                <div class="filter-group">
-                    <h3>Furnishing</h3>
-                    <label><input type="radio" name="furnishing" value="full"> Full</label>
-                    <label><input type="radio" name="furnishing" value="semi"> Semi</label>
-                    <label><input type="radio" name="furnishing" value="none"> None</label>
-                </div>
-
-                <div class="filter-group">
-                    <h3>Parking</h3>
-                    <label><input type="checkbox" value="2wheeler"> 2 Wheeler</label>
-                    <label><input type="checkbox" value="4wheeler"> 4 Wheeler</label>
-                </div>
-
-                <div class="filter-group">
-                    <label><input type="checkbox" value="lease"> Show Only Lease Properties</label>
-                </div>
-            </div>
+                </label>
+                <label>
+                    BHK Type:
+                    <select id="filterBHK" name="bhk">
+                        <option value="">Any</option>
+                        <option value="1">1 BHK</option>
+                        <option value="2">2 BHK</option>
+                        <option value="Studio">Studio</option>
+                    </select>
+                </label>
+                <label>
+                    Preferences:
+                    <select id="filterPref" name="preferences">
+                        <option value="">Any</option>
+                        <option value="Boys">Boys</option>
+                        <option value="Girls">Girls</option>
+                        <option value="Family">Family</option>
+                    </select>
+                </label>
+                <label>
+                    Available From:
+                    <input type="date" id="filterAvailableFrom" name="availableFrom">
+                </label>
+                <button type="submit" class="filter-btn">Apply Filters</button>
+            </form>
+        </aside>
+        <div class="results-container">
+            <h1 class="section-title">Search Results</h1>
+            <div id="results" class="results-grid"></div>
         </div>
-
-        <!-- Main Content -->
-        <div class="main-content">
-            <div id="searchResults"></div>
-            <div id="roomsGrid"></div>
-        </div>
-    </div>
-
-    <!-- Room Details Modal -->
-    <div id="roomModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div id="roomDetails"></div>
-        </div>
-    </div>
+    </main>
 
     <!-- Footer -->
     <footer>
@@ -162,7 +101,7 @@
                         <li><a href="index.html">Home</a></li>
                         <li><a href="search.html">Search Properties</a></li>
                         <li><a href="list-property.html">List Property</a></li>
-                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="#contact-section">Contact Us</a></li>
                     </ul>
                 </div>
                 
@@ -191,11 +130,149 @@
             </div>
         </div>
     </footer>
-<!-- Back to Top Button -->
-<button id="backToTop" class="back-to-top" aria-label="Back to top">
-    <i class="fas fa-arrow-up"></i>
-</button>
-    <script src="searchresults.js"></script>
-    <script src="script.js"></script>
+
+    <!-- Overlay and Close Button -->
+    <div class="expanded-overlay"></div>
+
+    <!-- Room Card Template (Collapsed) -->
+    <template id="roomCardTemplate">
+        <div class="room-card">
+            <div class="room-preview">
+                <div class="room-image">
+                    <img src="" alt="Room photo">
+                </div>
+                <div class="room-basic-info">
+                    <div class="room-header">
+                        <h3 class="rent"></h3>
+                        <p class="location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span class="city"></span>, <span class="state"></span>
+                        </p>
+                    </div>
+                    <div class="room-card-info-row">
+                        <span><i class="fas fa-building"></i> <span class="property-type"></span></span>
+                        <span><i class="fas fa-home"></i> <span class="bhk"></span></span>
+                        <span><i class="fas fa-ruler-combined"></i> <span class="buildup-area"></span></span>
+                        <span><i class="fas fa-user-check"></i> <span class="preferences"></span></span>
+                        <span><i class="fas fa-couch"></i> <span class="furnishing"></span></span>
+                        <span><i class="fas fa-parking"></i> <span class="parking"></span></span>
+                        <span><i class="fas fa-calendar"></i> <span class="available-from"></span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="button-group">
+                <button class="see-more-btn">
+                    <i class="fas fa-chevron-down"></i> <span>See More</span>
+                </button>
+            </div>
+        </div>
+    </template>
+
+    <!-- Expanded Room Template (Modal) -->
+    <template id="expandedRoomTemplate">
+        <!-- Location Header -->
+        <div class="location-header">
+            <h2 class="property-title"></h2>
+            <p class="location">
+                <i class="fas fa-map-marker-alt"></i>
+                <span class="address"></span>
+            </p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-info-row">
+            <!-- Left Column - Gallery -->
+            <div class="gallery-section">
+                <div class="room-image">
+                    <img src="" alt="Room photo">
+                    <div class="gallery-overlay"></div>
+                </div>
+            </div>
+
+            <!-- Right Column - Quick Info -->
+            <div class="main-info-content">
+                <div class="rent-section">
+                    <h3 class="rent"></h3>
+                    <p class="deposit-text"></p>
+                </div>
+
+                <!-- Overview Grid -->
+                <div class="overview-grid">
+                    <div class="overview-item">
+                        <i class="fas fa-home"></i>
+                        <div>
+                            <strong>Property Type</strong>
+                            <p class="property-type"></p>
+                        </div>
+                    </div>
+                    <div class="overview-item">
+                        <i class="fas fa-ruler-combined"></i>
+                        <div>
+                            <strong>Built-up Area</strong>
+                            <p class="buildup-area"></p>
+                        </div>
+                    </div>
+                    <div class="overview-item">
+                        <i class="fas fa-user-check"></i>
+                        <div>
+                            <strong>Preferred Tenant</strong>
+                            <p class="preferences"></p>
+                        </div>
+                    </div>
+                    <div class="overview-item">
+                        <i class="fas fa-calendar"></i>
+                        <div>
+                            <strong>Available From</strong>
+                            <p class="available-from"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Property Details -->
+        <div class="details-section">
+            <div class="info-section">
+                <h4>Location Details</h4>
+                <p><i class="fas fa-map-marker-alt"></i> <span class="address"></span></p>
+                <p><i class="fas fa-landmark"></i> <span class="landmark"></span></p>
+                <p><i class="fas fa-map-pin"></i> <span class="pincode"></span></p>
+            </div>
+
+            <div class="info-section">
+                <h4>Property Details</h4>
+                <div class="room-card-info-row">
+                    <span><i class="fas fa-building"></i> Floor: <span class="floor-number"></span></span>
+                    <span><i class="fas fa-compass"></i> Facing: <span class="facing"></span></span>
+                    <span><i class="fas fa-clock"></i> Age: <span class="age-of-property"></span></span>
+                    <span><i class="fas fa-couch"></i> Furnishing: <span class="furnishing"></span></span>
+                    <span><i class="fas fa-parking"></i> Parking: <span class="parking"></span></span>
+                </div>
+            </div>
+
+            <!-- Map Section -->
+            <div class="map-section">
+                <h4>Location on Map</h4>
+                <div class="room-map"></div>
+                <div class="coords">
+                    <a href="#" target="_blank" class="direction-link">
+                        <i class="fas fa-directions"></i> Get Directions
+                    </a>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <h4>Description</h4>
+                <div class="description"></div>
+            </div>
+        </div>
+        <div class="button-group">
+            <button class="show-less-btn">
+                <i class="fas fa-chevron-up"></i> <span>Show Less</span>
+            </button>
+        </div>
+    </template>
+
+    <script src="/searchresults.js"></script>
 </body>
 </html>

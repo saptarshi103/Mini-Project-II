@@ -29,42 +29,194 @@ body {
     line-height: 1.6;
     min-height: 100vh;
     background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
-    /* Alternative background options */
-    /* background: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%); */
-    /* background: linear-gradient(45deg, #f8f9fa 0%, #ffffff 100%); */
-    height: 100vh; /* Ensure the body fills the full viewport */
-    width: 100%; /* Full width */
+    height: 100vh;
+    width: 100%;
     position: relative;
     min-height: 100vh;
 }
 
 body::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: url('img/Luxury-Collection-President-Wilson-4-2.jpg');
-    background-size: cover; /* Ensures the image covers the entire area */
-    background-position: center; /* Centers the image */
-    background-repeat: no-repeat; /* Prevents the image from repeating */
-    filter: blur(8px); /* Apply blur effect to the background */
-    z-index: -1; /* Puts the image behind the content */
+    display: none;
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 2rem;
+    position: relative;
+    z-index: 1;
 }
 
 .grid {
     display: grid;
+    gap: 2rem;
 }
 
 .grid-two-cols {
     grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-three-cols {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-four-cols {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* Hero Section Structure */
+.hero-section {
+    min-height: 80vh;
+    position: relative;
+    padding: 4rem 0;
+}
+
+.hero-section::before {
+    display: none;
+}
+
+.hero-section .container {
+    width: 100%;
+}
+
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 2rem;
+    position: relative;
+    z-index: 2;
+}
+
+/* Search Box Container */
+.search-container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2rem;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 50px;
+    padding: 1rem 2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    border: 1px solid #e0e6ed;
+    min-height: 70px;
+    width: 100%;
+}
+
+/* Responsive Grid System */
+@media (max-width: 1200px) {
+    .container {
+        max-width: 960px;
+    }
+}
+
+@media (max-width: 992px) {
+    .container {
+        max-width: 720px;
+    }
+    
+    .grid-four-cols {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        max-width: 540px;
+    }
+    
+    .grid-two-cols,
+    .grid-three-cols,
+    .grid-four-cols {
+        grid-template-columns: 1fr;
+    }
+    
+    .search-box {
+        flex-direction: column;
+        border-radius: 25px;
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .container {
+        padding: 0 1.5rem;
+    }
+    
+    .hero-section {
+        min-height: 70vh;
+    }
+    
+    .hero-content {
+        padding: 1rem;
+    }
+}
+
+/* Section Spacing */
+section {
+    padding: 8rem 0;
+    position: relative;
+    z-index: 1;
+}
+
+section .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Content Alignment */
+.content-center {
+    text-align: center;
+    margin: 0 auto;
+}
+
+.content-left {
+    text-align: left;
+}
+
+.content-right {
+    text-align: right;
+}
+
+/* Grid Gaps */
+.gap-sm {
+    gap: 1rem;
+}
+
+.gap-md {
+    gap: 2rem;
+}
+
+.gap-lg {
+    gap: 3rem;
+}
+
+/* Grid Items */
+.grid-item {
+    position: relative;
+    width: 100%;
+}
+
+.grid-item-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.grid-item-start {
+    display: flex;
+    align-items: flex-start;
+}
+
+.grid-item-end {
+    display: flex;
+    align-items: flex-end;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -127,17 +279,13 @@ a, li {
 
 /* main section  */
 .hero-section {
-    background-image: url('../img/Luxury-Collection-President-Wilson-4-2.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
     min-height: 80vh;
     position: relative;
     padding: 4rem 0;
 }
 
 .hero-section::before {
-    display: none; /* Remove the overlay completely */
+    display: none;
 }
 
 .container.grid {
@@ -333,6 +481,109 @@ a, li {
 .search-button:hover {
     background-color: var(--btn-hover-bg-color);
 }
+
+    .search-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .search-box {
+        margin-top: 100px;
+        display: flex;
+        align-items: center;
+        background: #f8f9fa;
+        border-radius: 50px;
+        padding: 0.5rem 1.5rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        border: 1px solid #e0e6ed;
+    }
+
+    .search-box:focus-within {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        transform: translateY(-2px);
+        border-color: #a0b3c0;
+    }
+
+    .search-icon {
+        color: #8597a3;
+        font-size: 1.5rem;
+        margin-right: 1rem;
+    }
+
+    .search-input {
+        flex: 1;
+        border: none;
+        outline: none;
+        font-size: 1.2rem;
+        padding: 1rem 0;
+        color: #4a6572;
+        background: transparent;
+    }
+
+    .search-input::placeholder {
+        color: #a0b3c0;
+    }
+
+    .search-button {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: #5d9cec;
+        color: white;
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 40px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .search-button:hover {
+        background: #4a89dc;
+        transform: translateX(5px);
+    }
+
+    .search-button i {
+        transition: transform 0.3s ease;
+    }
+
+    .search-button:hover i {
+        transform: translateX(3px);
+    }
+
+    @media (max-width: 768px) {
+        .search-title {
+            font-size: 2rem;
+        }
+
+        .search-subtitle {
+            font-size: 1rem;
+        }
+
+        .search-container {
+            padding: 1rem;
+        }
+
+        .search-box {
+            flex-direction: column;
+            border-radius: 20px;
+            padding: 1rem;
+        }
+
+        .search-input {
+            width: 100%;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .search-button {
+            width: 100%;
+            justify-content: center;
+        }
+    }
 
 /* Update hero section background */
 .hero-section::before {

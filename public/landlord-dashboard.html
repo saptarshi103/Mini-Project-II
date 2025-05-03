@@ -6,61 +6,7 @@
     <title>Room Details</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f8f9fa;
-            margin: 20px;
-        }
-        .room {
-            background: #fff;
-            border: 1px solid #dee2e6;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-            transition: transform 0.2s;
-        }
-        .room:hover {
-            transform: translateY(-5px);
-            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
-        }
-        .carousel img {
-            object-fit: cover;
-            height: 300px;
-            border-radius: 10px;
-        }
-        h1 {
-            color: #007BFF;
-            margin-bottom: 30px;
-        }
-        .room h2 {
-            color: #007BFF;
-        }
-        p {
-            margin: 5px 0;
-            color: #495057;
-        }
-        strong {
-            color: #343a40;
-        }
-        .btn-primary {
-            background-color: #007BFF;
-            border: none;
-            padding: 10px 15px;
-            font-size: 16px;
-            border-radius: 5px;
-        }
-        .btn-danger {
-            margin-top: 15px;
-        }
-        #postButton {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            z-index: 1000;
-        }
-    </style>
+    <link rel="stylesheet" href="/landlord-dashboard.css">
 </head>
 <body>
     <div class="container">
@@ -124,25 +70,27 @@
                 roomDiv.innerHTML = `
                     <h2>Room ID: ${room.room_id}</h2>
                     ${carousel}
-                    <p><strong>Address:</strong> ${room.address}</p>
-                    <p><strong>City:</strong> ${room.city}</p>
-                    <p><strong>State:</strong> ${room.state}</p>
-                    <p><strong>Pincode:</strong> ${room.pincode}</p>
-                    <p><strong>Landmark:</strong> ${room.landmark}</p>
-                    <p><strong>Landlord ID:</strong> ${room.landlord_id}</p>
-                    <p><strong>Location:</strong> ${room.location_cordinate}</p>
-                    <p><strong>Rent:</strong> ₹${room.rent}</p>
-                    <p><strong>Deposit:</strong> ₹${room.deposit}</p>
-                    <p><strong>Buildup Area:</strong> ${room.buildup_area} sq ft</p>
-                    <p><strong>Furnishing:</strong> ${room.furnishing}</p>
-                    <p><strong>BHK:</strong> ${room.bhk}</p>
-                    <p><strong>Parking:</strong> ${room.parking}</p>
-                    <p><strong>Balcony:</strong> ${room.balcony}</p>
-                    <p><strong>Facing:</strong> ${room.facing}</p>
-                    <p><strong>Bathrooms:</strong> ${room.number_of_bathrooms}</p>
-                    <p><strong>Water Supply:</strong> ${room.water_supply ? 'Yes' : 'No'}</p>
-                    <p><strong>Inverter Backup:</strong> ${room.inverter_backup ? 'Yes' : 'No'}</p>
-                    <p><strong>Description:</strong> ${room.description}</p>
+                    <div class="room-details-list">
+                        <p><strong>Address:</strong> ${room.address}</p>
+                        <p><strong>City:</strong> ${room.city}</p>
+                        <p><strong>State:</strong> ${room.state}</p>
+                        <p><strong>Pincode:</strong> ${room.pincode}</p>
+                        <p><strong>Landmark:</strong> ${room.landmark}</p>
+                        <p><strong>Landlord ID:</strong> ${room.landlord_id}</p>
+                        <p><strong>Location:</strong> ${room.location_cordinate}</p>
+                        <p><strong>Rent:</strong> ₹${room.rent}</p>
+                        <p><strong>Deposit:</strong> ₹${room.deposit}</p>
+                        <p><strong>Buildup Area:</strong> ${room.buildup_area} sq ft</p>
+                        <p><strong>Furnishing:</strong> ${room.furnishing}</p>
+                        <p><strong>BHK:</strong> ${room.bhk}</p>
+                        <p><strong>Parking:</strong> ${room.parking}</p>
+                        <p><strong>Balcony:</strong> ${room.balcony}</p>
+                        <p><strong>Facing:</strong> ${room.facing}</p>
+                        <p><strong>Bathrooms:</strong> ${room.number_of_bathrooms}</p>
+                        <p><strong>Water Supply:</strong> ${room.water_supply ? 'Yes' : 'No'}</p>
+                        <p><strong>Inverter Backup:</strong> ${room.inverter_backup ? 'Yes' : 'No'}</p>
+                        <p><strong>Description:</strong> ${room.description}</p>
+                    </div>
                     <button class="btn btn-danger" onclick="deleteRoom(${room.room_id})">Delete Room</button>
                 `;
                 container.appendChild(roomDiv);

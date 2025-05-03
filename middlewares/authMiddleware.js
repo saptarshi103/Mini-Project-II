@@ -1,16 +1,13 @@
 const jwt = require('jsonwebtoken');
 const jwksClient = require('jwks-rsa');
 const db = require('../models');
-const Landlord = db.Landlord; // Correct way to access model
-
-console.log("Landlord Model Loaded?", !!Landlord); // Should print 'true'
-;
+const Landlord = db.Landlord;
 
 const client = jwksClient({
   jwksUri: `https://cognito-idp.ap-south-1.amazonaws.com/ap-south-1_89pEaReWF/.well-known/jwks.json`
 });
 
-// Function to get signing key
+// Get signing key
 function getKey(header, callback) {
   client.getSigningKey(header.kid, (err, key) => {
     if (err) {
@@ -22,19 +19,16 @@ function getKey(header, callback) {
   });
 }
 
-// Middleware function
+// Middleware
 const authenticateToken = async (req, res, next) => {
   const idToken = req.cookies.id_token;
   const accessToken = req.cookies.access_token;
-
-  console.log("Extracted ID Token:", idToken);
-  console.log("Extracted Access Token:", accessToken);
 
   if (!idToken && !accessToken) {
     return res.redirect('/login');
   }
 
-  // Function to decode token and store details in DB
+  // Decode and verify token
   const decodeAndStoreToken = async (token, tokenType) => {
     try {
       const decoded = await new Promise((resolve, reject) => {
@@ -44,20 +38,14 @@ const authenticateToken = async (req, res, next) => {
         });
       });
 
-      console.log(`Decoded ${tokenType}:`, decoded);
-
-      // Extract sub and email
       const landlord_id = decoded.sub;
-      const email = decoded.email || decoded.username; // Use username if email is missing
-
-      console.log(`Extracted from ${tokenType} -> Landlord ID: ${landlord_id}, Email: ${email}`);
+      const email = decoded.email || decoded.username;
 
       if (!Landlord) {
-        console.error("Landlord model is not properly loaded. Check Sequelize setup.");
+        console.error("Landlord model not loaded.");
         return;
       }
 
-      // Ensure Sequelize table is connected
       const landlord = await Landlord.findOne({ where: { landlord_id } });
 
       if (!landlord) {
@@ -67,17 +55,22 @@ const authenticateToken = async (req, res, next) => {
         console.log("✅ Landlord Already Exists:", landlord.toJSON());
       }
 
-      req.user = { id: landlord_id, email: email }; // Attach user info
+      req.user = { id: landlord_id, email: email };
     } catch (error) {
       console.error(`${tokenType} verification failed:`, error.message);
+      throw new Error(`${tokenType} Invalid or Expired`);
     }
   };
 
-  // Decode and store details from both tokens
-  if (idToken) await decodeAndStoreToken(idToken, "ID Token");
-  if (accessToken) await decodeAndStoreToken(accessToken, "Access Token");
+  try {
+    if (idToken) await decodeAndStoreToken(idToken, "ID Token");
+    if (accessToken) await decodeAndStoreToken(accessToken, "Access Token");
 
-  next();
+    next(); // only go to next if token is valid
+  } catch (err) {
+    console.error('Authentication Error:', err.message);
+    return res.redirect('/login'); // redirect if token invalid or expired
+  }
 };
 
 module.exports = authenticateToken;
