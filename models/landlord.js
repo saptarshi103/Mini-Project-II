@@ -1,24 +1,32 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/dbConfig');
 
-// Landlords model definition
 const Landlord = sequelize.define('Landlord', {
     landlord_id: {
-        type: DataTypes.STRING,  // Changed to STRING since it's the Cognito user ID (which is alphanumeric)
+        type: DataTypes.STRING,
         primaryKey: true,
         allowNull: false,
     },
     email: {
         type: DataTypes.STRING,
-        unique: true,  // Ensure email is unique across landlords
-        allowNull: false,  // Email is mandatory
+        unique: true,
+        allowNull: false,
     },
-    
+    name: {
+        type: DataTypes.STRING,
+        allowNull: true, // optional, defaults to true if not specified
+    },
+    mobile: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    profile_completed: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+    },
 }, {
-    tableName: 'Landlords',  // Match the table name in your database
-    timestamps: false,  // Enable timestamps, as users will have createdAt and updatedAt fields
+    tableName: 'Landlords',
+    timestamps: false,
 });
-
-// Optionally, add some instance methods or hooks if required (e.g., for validation or additional processing)
 
 module.exports = Landlord;

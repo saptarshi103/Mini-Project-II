@@ -43,6 +43,9 @@ app.use("/dashboard", dashboardRoutes);
 app.use(express.static('public'));
 
 
+const landlordProfileRoutes = require('./routes/landlordProfile');
+app.use('/profile', landlordProfileRoutes);
+
 
 
 

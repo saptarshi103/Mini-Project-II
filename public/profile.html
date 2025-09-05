@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Profile</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 30px;
+    }
+    .profile-box {
+      max-width: 400px;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      background-color: #f9f9f9;
+    }
+    .profile-box h2 {
+      text-align: center;
+    }
+    .profile-field {
+      margin-bottom: 15px;
+    }
+    .profile-field label {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="profile-box">
+    <h2>Your Profile</h2>
+    <div class="profile-field"><label>ID:</label> <span id="landlordId"></span></div>
+    <div class="profile-field"><label>Name:</label> <span id="name"></span></div>
+    <div class="profile-field"><label>Email:</label> <span id="email"></span></div>
+    <div class="profile-field"><label>Mobile:</label> <span id="mobile"></span></div>
+  </div>
+
+  <script>
+    // Fetch profile data from backend
+    fetch('/profile/p', {
+      credentials: 'include'
+    })
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById('landlordId').innerText = data.landlord_id || 'N/A';
+      document.getElementById('name').innerText = data.name || 'Not set';
+      document.getElementById('email').innerText = data.email || 'N/A';
+      document.getElementById('mobile').innerText = data.mobile || 'Not set';
+    })
+    .catch(err => {
+      console.error('Failed to fetch profile:', err);
+    });
+  </script>
+</body>
+</html>

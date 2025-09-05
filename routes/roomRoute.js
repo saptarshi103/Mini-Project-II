@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
+const { v4: uuidv4 } = require('uuid');
+const FileType = require('file-type');
 const RoomDetails = require('../models/roomDetails');
 const fs = require("fs");
 const path = require("path");
@@ -8,6 +10,8 @@ const { uploadToS3 } = require('../uploadToS3'); // Adjust path as needed
 const AWS = require("aws-sdk");
 const jwt = require("jsonwebtoken");
 const authMiddleware = require("../middlewares/authMiddleware");
+const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+
 
 
 
@@ -36,17 +40,26 @@ router.get('/x', (req, res) => {
 // Configure multer for multiple file uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/');
+    cb(null, 'uploads/'); // safe folder
   },
   filename: (req, file, cb) => {
-    const suffix = Date.now();
-    cb(null, `${suffix}-${file.originalname}`);
+    const ext = path.extname(file.originalname);
+    const uniqueName = `${uuidv4()}-${Date.now()}${ext}`;
+    cb(null, uniqueName);
   }
 });
 
+
 const upload = multer({
   storage,
-  limits: { files: 4 }, // Maximum of 4 files
+  limits: { files: 4, fileSize: 5 * 1024 * 1024 }, // max 4 files, 5MB each
+  fileFilter: (req, file, cb) => {
+    if (allowedTypes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only JPG, PNG, GIF images are allowed'), false);
+    }
+  }
 });
 
 // POST endpoint to create a new room listing with up to 4 photos
@@ -80,7 +93,7 @@ router.post('/create', authMiddleware, upload.array('photos', 4), async (req, re
       landmark
     } = req.body;
 
-    const landlord_id = req.user.id; // ✅ Auto-filled from Cognito token
+    const landlord_id = req.user.id; //  Auto-filled from Cognito token
 
     const files = req.files;
 
@@ -127,7 +140,7 @@ router.post('/create', authMiddleware, upload.array('photos', 4), async (req, re
       inverter_backup,
       description,
       property_type,
-      landlord_id, // ✅ injected from token
+      landlord_id, //injected from token
       address,
       landmark,
     });
@@ -140,7 +153,7 @@ router.post('/create', authMiddleware, upload.array('photos', 4), async (req, re
 });
 
 
-router.get('/postyourroom',authMiddleware, (req, res) => {
+router.get('/postyourroom', authMiddleware, (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'index2.html'));
 });
 
